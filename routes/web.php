@@ -17,7 +17,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('injection/ok', function (\App\HttpBinService $service) {
+Route::get('injection/ok', function (\App\HttpBinService $service, \Illuminate\Contracts\Foundation\Application $app) {
+    \Illuminate\Support\Facades\Log::info("resolved: " . $app->resolved(\App\HttpBinService::class));
     throw new RuntimeException("STOP");
     return $service->ok();
 });
@@ -27,7 +28,8 @@ Route::get('injection/timeout', function (\App\HttpBinService $service) {
     return $service->timeout();
 });
 
-Route::get('resolve/ok', function () {
+Route::get('resolve/ok', function (\Illuminate\Contracts\Foundation\Application $app) {
+    \Illuminate\Support\Facades\Log::info("resolved: " . $app->resolved(\App\HttpBinService::class));
     throw new RuntimeException("STOP");
     $service = \Illuminate\Support\Facades\App::make(\App\HttpBinService::class);
     return $service->ok();

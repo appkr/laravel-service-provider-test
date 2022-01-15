@@ -16,3 +16,25 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('injection/ok', function (\App\HttpBinService $service) {
+    throw new RuntimeException("STOP");
+    return $service->ok();
+});
+
+Route::get('injection/timeout', function (\App\HttpBinService $service) {
+    throw new RuntimeException("STOP");
+    return $service->timeout();
+});
+
+Route::get('resolve/ok', function () {
+    throw new RuntimeException("STOP");
+    $service = \Illuminate\Support\Facades\App::make(\App\HttpBinService::class);
+    return $service->ok();
+});
+
+Route::get('resolve/timeout', function () {
+    throw new RuntimeException("STOP");
+    $service = \Illuminate\Support\Facades\App::make(\App\HttpBinService::class);
+    return $service->timeout();
+});
